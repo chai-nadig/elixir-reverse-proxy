@@ -2,7 +2,6 @@ defmodule ReverseProxy.Runner do
   @moduledoc """
   Retreives content from an upstream.
   """
-
   alias Plug.Conn
 
   @typedoc "Representation of an upstream service."
@@ -79,7 +78,8 @@ defmodule ReverseProxy.Runner do
   end
 
   @spec process_response({Atom.t, Map.t}, Conn.t) :: Conn.t
-  defp process_response({:error, _}, conn) do
+  defp process_response({:error, e}, conn) do
+    IO.inspect(e)
     conn |> Conn.send_resp(502, "Bad Gateway")
   end
   defp process_response({:ok, response}, conn) do
