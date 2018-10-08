@@ -2,7 +2,6 @@ defmodule ReverseProxy.Runner do
   @moduledoc """
   Retreives content from an upstream.
   """
-
   alias Plug.Conn
 
   @typedoc "Representation of an upstream service."
@@ -30,6 +29,9 @@ defmodule ReverseProxy.Runner do
                                                   String.t,
                                                   [{String.t, String.t}]}
   defp prepare_request(server, conn) do
+    IO.puts("prepare_request")
+    IO.inspect(server)
+    IO.inspect(conn)
     conn = conn
             |> Conn.put_req_header(
               "x-forwarded-for",
@@ -75,11 +77,16 @@ defmodule ReverseProxy.Runner do
   defp prepare_server(_, "http://" <> _ = server), do: server
   defp prepare_server(_, "https://" <> _ = server), do: server
   defp prepare_server(scheme, server) do
-    "#{scheme}://#{server}"
+    p_server = "#{scheme}://#{server}"
+    IO.puts("prepare_server")
+    IO.inspect(p_server)
+    p_server
   end
 
   @spec process_response({Atom.t, Map.t}, Conn.t) :: Conn.t
-  defp process_response({:error, _}, conn) do
+  defp process_response({:error, e}, conn) do
+    IO.inspect(e)
+    IO.inspect(conn)
     conn |> Conn.send_resp(502, "Bad Gateway")
   end
   defp process_response({:ok, response}, conn) do
