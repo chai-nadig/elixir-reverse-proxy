@@ -21,7 +21,7 @@ defmodule ReverseProxy.Runner do
     {method, url, body, headers} = prepare_request(server, conn)
 
     method
-      |> client.request(url, body, headers, [timeout: 5_000, recv_timeout: 50_000])
+      |> client.request(url, body, headers, [timeout: 50_000, recv_timeout: 50_000])
       |> process_response(conn)
   end
 
